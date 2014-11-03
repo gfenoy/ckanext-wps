@@ -1,0 +1,137 @@
+{#
+Display a table containing identification/provider metata information of OGC
+WebServices.
+
+wps - An OWSLib wps instance.
+
+Example:
+
+    {% snippet "wps/snippets/CapabilitiesDisplay.html" wps=wps%}
+
+#}
+
+  <div class="container">
+    <h3>{{ wps.identification.title }}</h3>
+
+  <table class="table table-striped table-bordered table-condensed" data-module="table-toggle-more">
+    <tr>
+      <th colspan="2" scope="row">Informations</thv>
+    </tr>
+    <tr>
+      <th scope="row">Abstract:</thv>
+      <td>{{ wps.identification.abstract }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Keywords:</th>
+      <td>
+	{% for k in wps.identification.keywords %}
+	<span class="label" data-format="{{ k.lower() or 'data' }}">{{ k }}</span>
+	{% endfor %}
+      </td>
+    </tr>
+    <tr>
+      <th colspan="2" scope="col">{{ _("Provider") }}</thv>
+    </tr>
+    <tr>
+      <th scope="row">{{ _("Name") }}</th>
+      <td>
+	{{ wps.provider.name }}
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">URL:</th>
+      <td>
+	{{ wps.provider.url }}
+      </td>
+    </tr>
+    <tr class="toggle-more">
+      <th colspan="2" scope="col">{{ _("Contact") }}</th>
+    </tr>
+    {% for k in wps.provider.contact.keys %}
+    {% if ( k[0]!="_" and wps.provider.contact[k]!="None") %}
+    <tr class="toggle-more">
+      <th scope="row">{{ k.title() }}</th>
+      <td>
+	{{ wps.provider.contact[k] }}
+      </td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+    <tr class="toggle-seperator">
+      <td colspan="2"> </td>
+    </tr>
+    <tr class="toggle-show toggle-show-more">
+      <td colspan="2">
+	<small>
+	<a class="show-more" href="#">Show more</a>
+	<a class="show-less" href="#">Hide</a>
+	</small>
+      </td>
+    </tr>
+
+  </table>
+
+  <ul class="resource-list">
+    <!--
+    <li>
+    <div class="btn-group">
+      <button class="btn btn-primary" name="wps_c_prev" type="submit"
+      data-module="wps_prev" >
+      {{ _('Previous') }}
+      </button>
+      <button class="btn btn-primary" name="wps_c" type="submit">
+      {% set t=wps.processes1.__len__()/4 %}
+      1 / {% if (t-(t.__int__()))>0 %}{{ ((t.__int__())+1) }}{% else %}
+      {{ (wps.processes1.__len__()/4) }}
+      {% endif %}
+      </button>
+      <button class="btn btn-primary" name="wps_c_next" type="submit"
+      data-module="wps_next" >
+      {{ _('Next') }}
+      </button>
+    </div>
+    </li>
+    -->
+    {% for process in wps.processes1 %}
+    {#{% if loop.index<5 %}#}
+    <li class="resource-item{% if loop.index>5 %} toggle-more{% endif %}" >
+      <p class="heading">
+	{{ process.identifier }}
+      </p>
+      <p class="description">{{ process.title }}</p>
+      <p class="description">{{ process.abstract }}</p>
+      <p class="description full_description"></p>
+      <div class="dropdown btn-group">
+	<a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+	<i class="icon-share-alt"></i>
+	{{ _("Use") }}
+	<span class="caret"></span>
+	</a>
+
+	<ul class="dropdown-menu" data-module="wpspreview"
+	  data-wpsid="{{ process.identifier }}"
+	  data-wpssid="{{ wps.resource.id }}">
+	  <li>
+	   <a href="{% url_for
+	             controller='ckanext.wps.controllers:WpsController',
+	             action='describe', operation=process.identifier,
+	             id=wps.package.name, resource_id=wps.resource.id %}">
+	    <i class="icon-bar-chart"></i>Details
+	   </a>
+	  </li>
+	  <li>
+	   <a href="{% url_for
+	             controller='ckanext.wps.controllers:WpsController',
+	             action='execute', operation=process.identifier,
+	             id=wps.package.name, resource_id=wps.resource.id %}">
+	   <i class="icon-magic"></i>Execute</a>
+	  </li>
+	</ul>
+	</div>
+    </li>
+    {#{% endif %}#}
+    {% endfor %}
+  </ul>
+  </div>
+
+  

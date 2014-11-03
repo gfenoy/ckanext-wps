@@ -1,0 +1,126 @@
+{% extends "package/base.html" %}
+
+{% set res = c.resource %}
+
+{% block page %}
+<div id="pDescription">
+<h5>{{ _("Inputs") }}</h5>
+{% for i in c.wps["dataInputs"] %}
+  <p class="heading">
+  {{ i["identifier"] }}
+  {% if i["minoccurs"]==0 %} ({{ _("optional")}}){% endif %}:
+  {% if i["dataType"]!="ComplexData" %}
+  <a href="{{ i["dataType"] }}">{{ i["dataType"].split("#")[1]}}</a>
+  </p>
+  <p class="description">{{ i["title"] }}</p>
+  <p class="description">{{ i["abstract"] }}</p>
+  {% else %}
+  </p>
+  <p class="description">{{ i["title"] }}</p>
+  <p class="description">{{ i["abstract"] }}</p>
+  <table class="table">
+    <tr>
+      <th>mimeType</th>
+      <th>encoding</th>
+      <th>schema</th>
+    </tr>
+    <tr>
+      <td>
+	{{ i["mimeType"] }}
+      </td>
+      <td>
+	{{ i["encoding"] }}
+      </td>
+      <td>
+	{{ i["schema"] }}
+      </td>
+    </tr>
+    {% for j in i["supportedvalues"] %}
+    <tr>
+      <td>
+	{{ j["mimeType"] }}
+      </td>
+      <td>
+	{{ j["encoding"] }}
+      </td>
+      <td>
+	{{ j["schema"] }}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+{#{{ h.dump_json(i) }}#}
+{% endfor %}
+<h5>{{ _("Outputs") }}</h5>
+{% for i in c.wps["processOutputs"] %}
+  <p class="heading">
+  {{ i["identifier"] }}
+  {% if i["minoccurs"]==0 %} ({{ _("optional")}}){% endif %}:
+  {% if i["dataType"]!="ComplexData" %}
+  <a href="http{{ i["dataType"] }}">{{ i["dataType"].split("#")[1]}}</a>
+  </p>
+  <p class="description">{{ i["title"] }}</p>
+  <p class="description">{{ i["abstract"] }}</p>
+  {% else %}
+  <p class="description">{{ i["title"] }}</p>
+  <p class="description">{{ i["abstract"] }}</p>
+  <table class="table">
+    <tr>
+      <th>mimeType</th>
+      <th>encoding</th>
+      <th>schema</th>
+    </tr>
+    <tr>
+      <td>
+	{{ i["mimeType"] }}
+      </td>
+      <td>
+	{{ i["encoding"] }}
+      </td>
+      <td>
+	{{ i["schema"] }}
+      </td>
+    </tr>
+    {% for j in i["supportedvalues"] %}
+    <tr>
+      <td>
+	{{ j["mimeType"] }}
+      </td>
+      <td>
+	{{ j["encoding"] }}
+      </td>
+      <td>
+	{{ j["schema"] }}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <div class="dropdown">
+    <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+    <i class="icon-file"></i>
+    {{ i["mimeType"] }} ({{ i["encoding"] }}/{{ i["schema"] }})
+    <span class="caret"></span>
+    </a>
+    {{ h.json_dump(i) }}
+    {% if i["supportedvalues"].__len__()>0 %}
+    <ul class="dropdown-menu">
+      {% for j in i["supportedvalues"] %}
+      <li><i class="icon-file"></i>{{ j["mimeType"] }} ({{ j["encoding"] }}/{{ j["schema"] }})</li>
+      {% endfor %}
+    </ul>
+    {% endif %}  
+  </div>
+  {% endif %}
+  
+{#{{ h.dump_json(i) }}#}
+{% endfor %}
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+

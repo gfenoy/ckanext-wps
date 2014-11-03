@@ -1,0 +1,33 @@
+{% extends "package/base.html" %}
+
+{#
+{% block scripts %}
+{{ super() }}
+<script data-main="/ckanext-wps/assets/js/cgal" src="/ckanext-wps/assets/js/lib/require.js"></script>
+{% endblock %}
+#}
+
+{% block styles %}
+ <link
+  href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+  rel="stylesheet" /> 
+  {{ super() }}
+{% endblock %}
+
+{% block page %}
+  {% snippet "wps/snippets/CapabilitiesDisplay.html", wps=h.capabilities_helper() %}
+
+<div id="data-preview">
+</div>
+
+<div id="wps_log"></div>
+<!--
+<script data-main="assets/js/cgal"
+src="assets/js/lib/require.js"></script>
+-->
+
+
+{% resource 'vendor/bootstrap' %}
+
+{% resource 'ckanext-wps/wps' %}
+{% endblock %}
