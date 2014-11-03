@@ -13,6 +13,7 @@ Installation
 ------------
 
     $ git clone https://github.com/gfenoy/ckanext-wps.git
+    $ cd ckanext-wps
     $ python setup.py develop
     $ pip install -r pip-requirements.txt
 
@@ -20,11 +21,11 @@ Installation
 Configuration
 -------------
 
-**1.  Enabling Vector Storer**
+**1.  Enabling CKANEXT-WPS**
 
-  To enable the Vector Storer Extension add this to ckan plugins in the config file :
+  To enable the CKENXT-WPS Extension add this to ckan plugins in the config file :
  
-        ckan.plugins = vectorstorer
+        ckan.plugins = wps_preview
 
 **2.  CKANEXT-WPS config options**
 
