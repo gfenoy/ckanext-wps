@@ -1,4 +1,4 @@
-CKAN WPS Extension ######
+CKAN WPS Extension
 ============================
 
 
